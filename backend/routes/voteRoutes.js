@@ -3,12 +3,14 @@ const router = express.Router();
 import {
   checkVoteStatus,
   castVote,
-  getAllCandidates
+  getAllCandidates,
+  getLiveVoteCount,
 } from "../controllers/voteController.js"
 import { verifyToken } from "../middleware/verifyToken.js";
 
-router.get("/status/:voterId", checkVoteStatus); // Check if user has voted
-router.post("/cast", verifyToken, castVote); // Cast a vote
+router.get("/status/:voterId", checkVoteStatus); 
+router.post("/cast", verifyToken, castVote); 
+router.get("/live-count", verifyToken, getLiveVoteCount); 
 router.get('/candidates', verifyToken, getAllCandidates);
 
 export default router;

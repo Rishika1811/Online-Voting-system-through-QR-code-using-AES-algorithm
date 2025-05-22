@@ -19,7 +19,7 @@ export const checkVoteStatus = async (req, res) => {
     console.error("Vote Status Error:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
-};
+}; 
 
 export const castVote = async (req, res) => {
   try {
@@ -63,6 +63,36 @@ export const castVote = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+// @route GET /api/vote/live-count
+export const getLiveVoteCount = async (req, res) => {
+  try {
+    const candidates = await Candidate.find().select("name voteCount");
+
+    if (!candidates || candidates.length === 0) {
+      return res.status(404).json({ message: "No candidates found" });
+    }
+
+    // Calculate total votes
+    const totalVotes = candidates.reduce((sum, candidate) => sum + candidate.voteCount, 0);
+
+    // Add %votes to each candidate
+    const candidatesWithPercentages = candidates.map(candidate => ({
+      ...candidate.toObject(),
+      percentVotes: totalVotes === 0 ? 0 : ((candidate.voteCount / totalVotes) * 100).toFixed(2)
+    }));
+
+    return res.status(200).json({
+      message: "Live voting count retrieved successfully",
+      candidates: candidatesWithPercentages,
+      totalVotes,
+    });
+  } catch (error) {
+    console.error("Live Vote Count Error:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 
 export const getAllCandidates = async (req, res) => {
   try {

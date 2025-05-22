@@ -1,6 +1,7 @@
 import User from "../models/User.js"
 import qrcode from "qrcode"
 import crypto from "crypto"
+import { log } from "console";
 
 const algorithm = "aes-256-cbc";
 const secretKey = process.env.AES_SECRET_KEY; 
@@ -26,6 +27,7 @@ export const registerUser = async (req, res) => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const encryptedPayload = encryptData(`${voterId}:${email}`);
     const qrCode = await qrcode.toDataURL(`http://localhost:5173/details/${encodeURIComponent(encryptedPayload)}`);
+    // console.log(qrCode);
 
     const newUser = new User({
       fullName,
