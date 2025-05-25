@@ -49,7 +49,8 @@ const ResultScreen = () => {
             Live vote count
           </p>
           <p className="text-sm text-gray-500">
-            (Results update automatically every 30 seconds)
+            {/* (Results update automatically every 30 seconds) */}
+            <br /><br />
           </p>
         </div>
 
